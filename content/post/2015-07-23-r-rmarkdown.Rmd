@@ -1,0 +1,67 @@
+---
+title: "Exploration of 2019 CES data"
+author: "Jiahui Pan"
+date: "September 28, 2020"
+categories: ["R"]
+tags: ["R Markdown", "plot", "regression"]
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("tidyverse")
+# install.packages("devtools")
+#devtools::install_github("hodgettsp/cesR")
+# install.packages("visdat")
+# install.packages("skimr")
+library(tidyverse)
+library(devtools)
+library(cesR)
+library(visdat)
+library(skimr)
+library(ggplot2)
+```
+
+# abstract
+We plotted a histogram on the ages in 2019 CES Online surveys and performed data diagnistics. The results showed young people are inactive to participate in the surveys.
+
+
+# Introduction
+CES data reflects Canadians' political behaviour and attitudes and provides an unparalleled snapshot and record of Canadian society and political life.
+We investigated the 2019 CES data and performed data diagnoistics on the distribution ages,and results showed young people are inactive to participate in the surveys.
+There may exists response erro.
+
+```{r download, warning=FALSE, message=FALSE}
+cesR::get_ces("ces2019_web")
+```
+
+
+```{r}
+ces2019_web %>% ggplot(aes(cps19_age)) + geom_histogram(binwidth = 1) +
+  labs(x = "age", 
+       y = "number",
+       title = "Distribution of age in 2019 CES Online surveys") +
+  theme_bw()
+```
+
+## Graph discussion
+In this graph we find the distribution of age is lightly skewed to the right.
+
+# Discussion
+We find the count of age 100 is too high,which is a response error.
+Young people(under 30) are inactive to take the survey,which may cause inadequate frame-coverage error.
+
+## Weakness
+Sample size is small compared to the entire population.
+Response error exists and it is hard to identified and eliminated.
+
+# Reference
+- Wickham et al., (2019). Welcome to the tidyverse. Journal of
+  Open Source Software, 4(43), 1686,
+- Stephenson, Laura B; Harell, Allison; Rubenson, Daniel; Loewen, Peter John, 2020, '2019 Canadian Election Study - Online Survey', 
+- Stephenson, Laura, Allison Harrel, Daniel Rubenson and Peter Loewen. Forthcoming. 'Measuring Preferences and Behaviour in the 2019 Canadian Election Study,' Canadian Journal of Political Science.
+- Hadley Wickham, Jim Hester and Winston Chang (2020).
+  devtools: Tools to Make Developing R Packages Easier.
+- Elin Waring, Michael Quinn, Amelia McNamara, Eduardo Arino
+  de la Rubia, Hao Zhu and Shannon Ellis (2020). skimr:
+  Compact and Flexible Summaries of Data.
+- Tierney N (2017). “visdat: Visualising Whole Data Frames.”
+_JOSS_, *2*(16), 355. doi: 10.21105/joss.00355
